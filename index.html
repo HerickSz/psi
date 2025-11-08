@@ -204,9 +204,11 @@ Enviado com carinho 💜`;
     loading.style.display = "none";
     const numero = "5533984197194"; // seu número
     const url = `https://api.whatsapp.com/send?phone=${numero}&text=${encodeURIComponent(mensagem)}`;
-    window.open(url, "_blank");
+    window.location.href = url;
+
   }, 2000);
 });
 </script>
 </body>
 </html>
+
