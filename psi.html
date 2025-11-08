@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mini Quiz da Psicóloga 🧠💬</title>
+<style>
+  body {
+    font-family: "Poppins", sans-serif;
+    background: linear-gradient(180deg, #f5f3ff, #e0e7ff);
+    margin: 0; padding: 0;
+    color: #333;
+    display: flex; justify-content: center; align-items: center;
+    min-height: 100vh;
+  }
+  .card {
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    width: 90%; max-width: 480px;
+    padding: 30px;
+    text-align: center;
+  }
+  h1 { margin-top: 0; color: #6d28d9; }
+  .question { margin: 20px 0; text-align: left; }
+  label { font-weight: 600; color: #444; display: block; margin-bottom: 6px; }
+  input, textarea {
+    width: 100%;
+    border: 2px solid #e0e7ff;
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 15px;
+    background: #f9f9ff;
+    resize: none;
+  }
+  button {
+    margin-top: 25px;
+    background: #6d28d9;
+    color: #fff;
+    border: none;
+    padding: 14px 20px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  button:hover { background: #5b21b6; }
+  footer {
+    font-size: 13px;
+    color: #777;
+    margin-top: 15px;
+  }
+</style>
+</head>
+<body>
+  <div class="card">
+    <h1>Mini Quiz da Psicóloga 😄</h1>
+    <p>Responda rapidinho e envie pro Herick 💜</p>
+
+    <div class="question">
+      <label>1️⃣ Como está o nível de sanidade hoje?</label>
+      <input id="q1" type="text" placeholder="Ex: estável (por enquanto) 😅">
+    </div>
+
+    <div class="question">
+      <label>2️⃣ Qual foi o melhor momento do seu dia?</label>
+      <textarea id="q2" rows="2" placeholder="Ex: quando consegui terminar os relatórios!"></textarea>
+    </div>
+
+    <div class="question">
+      <label>3️⃣ Se sua semana fosse um filme, qual seria o título?</label>
+      <input id="q3" type="text" placeholder="Ex: O Retorno da Sessão de Terapia">
+    </div>
+
+    <div class="question">
+      <label>4️⃣ Um emoji que descreve seu humor agora?</label>
+      <input id="q4" type="text" placeholder="Ex: 🤯 😴 🤩">
+    </div>
+
+    <button id="sendBtn">Mandar pro Herick 💬</button>
+    <footer>As respostas só ficam aqui — nada é salvo 💭</footer>
+  </div>
+
+<script>
+document.getElementById("sendBtn").addEventListener("click", () => {
+  const q1 = document.getElementById("q1").value.trim();
+  const q2 = document.getElementById("q2").value.trim();
+  const q3 = document.getElementById("q3").value.trim();
+  const q4 = document.getElementById("q4").value.trim();
+
+  if (!q1 || !q2 || !q3 || !q4) {
+    alert("Responda todas as perguntas antes de enviar 😄");
+    return;
+  }
+
+  const mensagem = 
+`🧠 *Mini Quiz da Psicóloga* 💬
+
+1️⃣ Sanidade: ${q1}
+2️⃣ Melhor momento: ${q2}
+3️⃣ Filme da semana: ${q3}
+4️⃣ Emoji do humor: ${q4}
+
+Enviado com carinho 💜`;
+
+  // 👉 coloque seu número no formato internacional abaixo
+  const numero = "5533984197194"; // ex: 5581999999999
+  const url = `https://api.whatsapp.com/send?phone=${numero}&text=${encodeURIComponent(mensagem)}`;
+  window.open(url, "_blank");
+});
+</script>
+</body>
+</html>
