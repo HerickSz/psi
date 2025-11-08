@@ -2,17 +2,32 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Mini Quiz da Psicóloga 🧠💬</title>
 <style>
-  body {
-    font-family: "Poppins", sans-serif;
-    background: linear-gradient(180deg, #f5f3ff, #e0e7ff);
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+  html, body {
     margin: 0; padding: 0;
+    width: 100%; height: 100%;
+    overflow: hidden;
+    touch-action: manipulation;
+  }
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(180deg, #f5f3ff, #e0e7ff);
     color: #333;
     display: flex; justify-content: center; align-items: center;
-    min-height: 100vh;
+    position: relative;
   }
+  .emoji {
+    position: absolute;
+    font-size: 20px;
+    user-select: none;
+    pointer-events: none; 
+    opacity: 0.6;
+  }
+  .emoji.back { z-index: 1; }   
+  .emoji.front { z-index: 3; }  
   .card {
     background: #fff;
     border-radius: 20px;
@@ -20,6 +35,8 @@
     width: 90%; max-width: 480px;
     padding: 30px;
     text-align: center;
+    position: relative;
+    z-index: 2; 
   }
   h1 { margin-top: 0; color: #6d28d9; }
   .question { margin: 20px 0; text-align: left; }
@@ -44,6 +61,8 @@
     font-weight: 600;
     cursor: pointer;
     transition: background 0.2s;
+    z-index: 2;
+    position: relative;
   }
   button:hover { background: #5b21b6; }
   footer {
@@ -51,38 +70,94 @@
     color: #777;
     margin-top: 15px;
   }
+  .loading {
+    position: fixed;
+    top:0; left:0; right:0; bottom:0;
+    background: rgba(255,255,255,0.9);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; font-weight: 600; color: #6d28d9;
+    border-radius: 0;
+    z-index: 999;
+    display: none;
+    flex-direction: column;
+    gap: 12px;
+  }
 </style>
 </head>
 <body>
-  <div class="card">
-    <h1>Mini Quiz da Psicóloga 😄</h1>
-    <p>Responda rapidinho e envie pro Herick 💜</p>
 
-    <div class="question">
-      <label>1️⃣ Como está o nível de sanidade hoje?</label>
-      <input id="q1" type="text" placeholder="Ex: estável (por enquanto) 😅">
-    </div>
+<div class="card">
+  <h1>Mini Quiz da Psicóloga 😄</h1>
+  <p>Responda rapidinho e envie pro Herick 💜</p>
 
-    <div class="question">
-      <label>2️⃣ Qual foi o melhor momento do seu dia?</label>
-      <textarea id="q2" rows="2" placeholder="Ex: quando consegui terminar os relatórios!"></textarea>
-    </div>
-
-    <div class="question">
-      <label>3️⃣ Se sua semana fosse um filme, qual seria o título?</label>
-      <input id="q3" type="text" placeholder="Ex: O Retorno da Sessão de Terapia">
-    </div>
-
-    <div class="question">
-      <label>4️⃣ Um emoji que descreve seu humor agora?</label>
-      <input id="q4" type="text" placeholder="Ex: 🤯 😴 🤩">
-    </div>
-
-    <button id="sendBtn">Mandar pro Herick 💬</button>
-    <footer>As respostas só ficam aqui — nada é salvo 💭</footer>
+  <div class="question">
+    <label>1️⃣ Como está o nível de sanidade hoje?</label>
+    <input id="q1" type="text" placeholder="Ex: estável (por enquanto) 😅">
   </div>
 
+  <div class="question">
+    <label>2️⃣ Qual foi o melhor momento do seu dia?</label>
+    <textarea id="q2" rows="2" placeholder="Ex: quando consegui terminar os relatórios!"></textarea>
+  </div>
+
+  <div class="question">
+    <label>3️⃣ Se sua semana fosse um filme, qual seria o título?</label>
+    <input id="q3" type="text" placeholder="Ex: O Retorno da Sessão de Terapia">
+  </div>
+
+  <div class="question">
+    <label>4️⃣ Um emoji que descreve seu humor agora?</label>
+    <input id="q4" type="text" placeholder="Ex: 🤯 😴 🤩">
+  </div>
+
+  <button id="sendBtn">Mandar pro Herick 💬</button>
+  <footer>As respostas só ficam aqui — nada é salvo 💭</footer>
+</div>
+
+<div class="loading" id="loading">
+  Preparando a mensagem...
+  <div style="font-size:24px;">⏳</div>
+</div>
+
 <script>
+const emojis = ['🎈','💜','🧠','😄','✨','🌸','🍀','🌟','🎉','💌'];
+
+function criarEmoji() {
+  const span = document.createElement('span');
+  span.className = 'emoji';
+  span.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+
+  span.classList.add(Math.random() < 0.5 ? 'back' : 'front');
+
+  span.style.left = Math.random() * 100 + 'vw';
+  const alturaInicial = window.innerHeight / 3 + Math.random() * (window.innerHeight / 2);
+  span.style.top = alturaInicial + 'px';
+  span.style.fontSize = (14 + Math.random()*24) + 'px';
+  span.style.opacity = 0.4 + Math.random()*0.5;
+
+  document.body.appendChild(span);
+
+  const duracao = 3500 + Math.random()*3500;
+  const fim = -50;
+
+  let inicioTime = null;
+  function animar(timestamp){
+    if(!inicioTime) inicioTime = timestamp;
+    const progresso = (timestamp - inicioTime)/duracao;
+    const pos = alturaInicial + (fim - alturaInicial)*progresso;
+    span.style.top = pos + 'px';
+    if(progresso < 1){
+      requestAnimationFrame(animar);
+    } else {
+      span.remove();
+    }
+  }
+  requestAnimationFrame(animar);
+}
+
+// Densidade menor: emojis suficientes sem poluir visualmente
+setInterval(criarEmoji, 600);
+
 document.getElementById("sendBtn").addEventListener("click", () => {
   const q1 = document.getElementById("q1").value.trim();
   const q2 = document.getElementById("q2").value.trim();
@@ -104,10 +179,15 @@ document.getElementById("sendBtn").addEventListener("click", () => {
 
 Enviado com carinho 💜`;
 
-  // 👉 coloque seu número no formato internacional abaixo
-  const numero = "5533984197194"; // ex: 5581999999999
-  const url = `https://api.whatsapp.com/send?phone=${numero}&text=${encodeURIComponent(mensagem)}`;
-  window.open(url, "_blank");
+  const loading = document.getElementById("loading");
+  loading.style.display = "flex";
+
+  setTimeout(() => {
+    loading.style.display = "none";
+    const numero = "5533984197194"; // ex: 5581999999999
+    const url = `https://api.whatsapp.com/send?phone=${numero}&text=${encodeURIComponent(mensagem)}`;
+    window.open(url, "_blank");
+  }, 2000);
 });
 </script>
 </body>
