@@ -23,7 +23,7 @@
     position: absolute;
     font-size: 20px;
     user-select: none;
-    pointer-events: none; 
+    pointer-events: none;
     opacity: 0.6;
   }
   .emoji.back { z-index: 1; }   
@@ -32,32 +32,43 @@
     background: #fff;
     border-radius: 20px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    width: 90%; max-width: 480px;
-    padding: 30px;
+    width: 90%;
+    max-width: 480px;
+    padding: 25px 20px;
     text-align: center;
     position: relative;
-    z-index: 2; 
+    z-index: 2;
+    box-sizing: border-box;
   }
-  h1 { margin-top: 0; color: #6d28d9; }
-  .question { margin: 20px 0; text-align: left; }
-  label { font-weight: 600; color: #444; display: block; margin-bottom: 6px; }
+  h1 {
+    margin-top: 0; 
+    color: #6d28d9;
+    font-size: 1.5rem;
+  }
+  p {
+    font-size: 0.95rem;
+  }
+  .question { margin: 15px 0; text-align: left; }
+  label { font-weight: 600; color: #444; display: block; margin-bottom: 5px; font-size: 0.9rem; }
   input, textarea {
     width: 100%;
     border: 2px solid #e0e7ff;
     border-radius: 10px;
     padding: 10px;
-    font-size: 15px;
+    font-size: 0.9rem;
     background: #f9f9ff;
     resize: none;
+    box-sizing: border-box;
   }
   button {
-    margin-top: 25px;
+    margin-top: 20px;
     background: #6d28d9;
     color: #fff;
     border: none;
-    padding: 14px 20px;
+    padding: 14px;
+    width: 100%;
     border-radius: 10px;
-    font-size: 16px;
+    font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
     transition: background 0.2s;
@@ -66,9 +77,9 @@
   }
   button:hover { background: #5b21b6; }
   footer {
-    font-size: 13px;
+    font-size: 12px;
     color: #777;
-    margin-top: 15px;
+    margin-top: 12px;
   }
   .loading {
     position: fixed;
@@ -81,6 +92,14 @@
     display: none;
     flex-direction: column;
     gap: 12px;
+  }
+
+  @media (max-width: 400px) {
+    h1 { font-size: 1.3rem; }
+    p { font-size: 0.85rem; }
+    label { font-size: 0.85rem; }
+    input, textarea { font-size: 0.85rem; padding: 8px; }
+    button { font-size: 0.95rem; padding: 12px; }
   }
 </style>
 </head>
@@ -126,13 +145,12 @@ function criarEmoji() {
   const span = document.createElement('span');
   span.className = 'emoji';
   span.textContent = emojis[Math.floor(Math.random()*emojis.length)];
-
   span.classList.add(Math.random() < 0.5 ? 'back' : 'front');
 
   span.style.left = Math.random() * 100 + 'vw';
   const alturaInicial = window.innerHeight / 3 + Math.random() * (window.innerHeight / 2);
   span.style.top = alturaInicial + 'px';
-  span.style.fontSize = (14 + Math.random()*24) + 'px';
+  span.style.fontSize = (14 + Math.random()*20) + 'px';
   span.style.opacity = 0.4 + Math.random()*0.5;
 
   document.body.appendChild(span);
@@ -155,8 +173,8 @@ function criarEmoji() {
   requestAnimationFrame(animar);
 }
 
-// Densidade menor: emojis suficientes sem poluir visualmente
-setInterval(criarEmoji, 600);
+// Menos emojis no mobile e desktop
+setInterval(criarEmoji, 700);
 
 document.getElementById("sendBtn").addEventListener("click", () => {
   const q1 = document.getElementById("q1").value.trim();
@@ -184,7 +202,7 @@ Enviado com carinho 💜`;
 
   setTimeout(() => {
     loading.style.display = "none";
-    const numero = "5533984197194"; // ex: 5581999999999
+    const numero = "5533984197194"; // seu número
     const url = `https://api.whatsapp.com/send?phone=${numero}&text=${encodeURIComponent(mensagem)}`;
     window.open(url, "_blank");
   }, 2000);
