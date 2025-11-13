@@ -120,7 +120,7 @@
   </div>
 
   <div class="question">
-    <label>3️⃣ Se sua semana fosse um filme, qual seria o título?</label>
+    <label>3️⃣ Se o seu dia fosse um filme, qual seria o título?</label>
     <input id="q3" type="text" placeholder="Ex: O Retorno da Sessão de Terapia">
   </div>
 
@@ -173,7 +173,7 @@ function criarEmoji() {
   requestAnimationFrame(animar);
 }
 
-// Menos emojis no mobile e desktop
+
 setInterval(criarEmoji, 700);
 
 document.getElementById("sendBtn").addEventListener("click", () => {
@@ -192,7 +192,7 @@ document.getElementById("sendBtn").addEventListener("click", () => {
 
 1️⃣ Sanidade: ${q1}
 2️⃣ Melhor momento: ${q2}
-3️⃣ Filme da semana: ${q3}
+3️⃣ Filme do dia: ${q3}
 4️⃣ Emoji do humor: ${q4}
 
 Enviado com carinho 💜`;
@@ -202,7 +202,7 @@ Enviado com carinho 💜`;
 
   setTimeout(() => {
     loading.style.display = "none";
-    const numero = "5533984197194"; // seu número
+    const numero = "5533984197194"; 
     const url = `https://api.whatsapp.com/send?phone=${numero}&text=${encodeURIComponent(mensagem)}`;
     window.location.href = url;
 
@@ -211,4 +211,5 @@ Enviado com carinho 💜`;
 </script>
 </body>
 </html>
+
 
